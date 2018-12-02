@@ -1,0 +1,103 @@
+using System;
+
+public class Test
+{
+	public static void Main()
+	{
+	    HashTable hashTable = new HashTable();
+	    dataItem item1 = new dataItem(1245, "first");
+	    dataItem item2 = new dataItem(1987, "second");
+	    dataItem item3 = new dataItem(1876, "third");
+	    
+	    hashTable.insert(item1);
+	    hashTable.insert(item2);
+	    hashTable.insert(item3);
+	    
+	    dataItem searchItem = hashTable.search(1987);
+	    hashTable.print();
+	    //Console.WriteLine(searchItem.value);
+	    hashTable.delete(1987);
+	    searchItem = hashTable.search(1876);
+	    hashTable.print();
+	    //.WriteLine(searchItem.value);
+	    
+		// your code goes here
+	}
+}
+
+public class dataItem{
+    public int key;
+    public string value;
+        
+    public dataItem(int Key, string val){
+        key=Key;
+        value=val;
+    }
+    public dataItem(string val){
+        value=val;
+    }
+}
+
+public class HashTable{
+    private const int prime=13;
+    private const int tableSize=1000;
+    private dataItem[] hashTable = new dataItem[tableSize];
+    private dataItem deletedItem = new dataItem("deleted");
+    
+    private int hash(int key){
+        return key%tableSize;
+    }
+    
+    private int hash2(int key){
+        return (prime - (key-prime));
+    }
+    
+    public void insert(dataItem item){
+        int hashValue = hash(item.key);
+        int stepSize = hash2(item.key);
+        //dataItem item = new dataItem(key,value);
+        while(hashTable[hashValue]!=null && hashTable[hashValue].value!="deleted"){
+            hashValue+=stepSize;
+            hashValue%=tableSize;
+        }
+        hashTable[hashValue]=item;
+    }
+    
+    public dataItem search(int key){
+        int hashValue = hash(key);
+        int stepSize = hash2(key);
+        while(hashTable[hashValue]!=null){
+            if(hashTable[hashValue].key==key){
+                return hashTable[hashValue];
+            }
+            hashValue = hash(key);
+            stepSize = hash2(key);
+        }
+        return null;
+    }
+    
+    public void delete(int key){
+        int hashValue = hash(key);
+        int stepSize = hash2(key);
+        while(hashTable[hashValue]!=null){
+            if(hashTable[hashValue].key==key){
+                hashTable[hashValue] = deletedItem;
+                return;
+            }
+            hashValue = hash(key);
+            stepSize = hash2(key);
+        }
+        
+    }
+    
+    public void print(){
+        int size=0;
+        while(size<tableSize){
+            if(hashTable[size]!=null){
+                Console.WriteLine($"key:{hashTable[size].key}---value:{hashTable[size].value}");
+            }
+            size++;
+        }
+    }
+    
+}

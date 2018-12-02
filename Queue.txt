@@ -1,0 +1,70 @@
+using System;
+
+public class Test
+{
+	public static void Main()
+	{
+		Queue<int> q = new Queue<int>();
+		q.enqueue(1);
+        q.enqueue(2);
+        q.enqueue(3);
+        q.enqueue(4);
+        q.print();
+        q.dequeue();
+        q.dequeue();
+        q.print();
+	}
+}
+
+
+public class Queue<T>{
+   const int maxSize=1000;
+   int front=-1;
+   int rear=0;
+   T[] queue = new T[maxSize];
+   
+   	public void print(){
+	   for(int i=front; i<rear;i++){
+	        Console.WriteLine(queue[i]);
+	    }
+	}
+   
+   public T peek(){
+       return queue[front];
+   }
+   
+   public bool isFull(){
+       if(rear==maxSize)
+        return true;
+       else
+        return false;
+   }
+   
+   public bool isEmpty(){
+       if(front<0 || front>rear)
+        return true;
+       else
+        return false;
+   }
+   
+   public void enqueue(T item){
+       if(item!=null){
+            if(!isFull()){
+                queue[rear] = item;
+                rear=rear+1;
+                if(isEmpty()){
+                    front=front+1;
+                }
+            }
+       }
+   }
+   
+   public T dequeue(){
+       if(!isEmpty()){
+           T output= queue[front];
+           front=front+1;
+           return output;
+       }
+       return default(T);
+   }
+}
