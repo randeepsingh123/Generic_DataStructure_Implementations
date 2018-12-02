@@ -1,19 +1,19 @@
 using System;
+using System.Collections.Generic;
 
 public class Test
 {
 	public static void Main()
 	{
 	    BSTNode root=null;
-	    BSTNode node=null;
         BSTree tree = new BSTree();
         root = tree.insert(root,15);
-        node=root;
-        node = tree.insert(node,10);
-        node = tree.insert(node,20);
-        node = tree.insert(node,25);
-        node = tree.insert(node,8);
-        node = tree.insert(node,12);
+        root = tree.insert(root,10);
+        root = tree.insert(root,20);
+        root = tree.insert(root,25);
+        root = tree.insert(root,8);
+        root = tree.insert(root,12);
+        root = tree.insert(root,11);
         if(tree.search(root, 10)==true){
             Console.WriteLine("Found");
         }
@@ -22,6 +22,7 @@ public class Test
         }
         int height = tree.FindHeight(root);
         Console.WriteLine(height);
+        tree.PreOrderTraversal(root);
 	}
 }
 
@@ -73,6 +74,27 @@ public class BSTree{
         }
         int leftTreeHeight = FindHeight(root.left);
         int rightTreeHeight = FindHeight(root.right);
-        return Math.Max(leftTreeHeight, rightTreeHeight);
+        return Math.Max(leftTreeHeight, rightTreeHeight) + 1;
+    }
+    
+    public void LevelOrderTraversal(BSTNode root){
+        if(root==null) return;
+        Queue<BSTNode> queue = new Queue<BSTNode>();
+        queue.Enqueue(root);
+        while(queue.Count!=0){
+            BSTNode current = queue.Dequeue();
+            Console.WriteLine(current.data);
+            if(current.left!=null)
+                queue.Enqueue(current.left);
+            if(current.right!=null)
+                queue.Enqueue(current.right);
+        }
+    }
+    
+    public void PreOrderTraversal(BSTNode root){
+        if(root==null) return;
+        Console.WriteLine(root.data);
+        PreOrderTraversal(root.left);
+        PreOrderTraversal(root.right);
     }
 }
