@@ -22,7 +22,7 @@ public class Test
         }
         int height = tree.FindHeight(root);
         Console.WriteLine(height);
-        tree.PreOrderTraversal(root);
+        Console.WriteLine(tree.isBST(root, int.MinValue, int.MaxValue));
 	}
 }
 
@@ -53,6 +53,16 @@ public class BSTree{
         else{
             root.right= insert(root.right, data);
         }
+        return root;
+    }
+    
+    public BSTNode insertdirectly(BSTNode root, int data){
+        BSTNode temp = root;
+        while(temp.left!=null){
+            temp = temp.left;
+        }
+        BSTNode node =getNewBSTNode(data);
+        temp.left = node;
         return root;
     }
     
@@ -96,5 +106,45 @@ public class BSTree{
         Console.WriteLine(root.data);
         PreOrderTraversal(root.left);
         PreOrderTraversal(root.right);
+    }
+    
+    public bool isBST(BSTNode root, int minValue, int maxValue){
+        if(root==null) return true;
+        if(root.data > minValue && root.data < maxValue && isBST(root.left, minValue, root.data)
+            && isBST(root.right, root.data, maxValue)){
+                return true;
+            }
+        else{
+            return false;
+        }
+    }
+    
+    public BSTNode Delete(BSTNode root, int value){
+        if(root==null) return root;
+        else if(root.data<value)
+            root.left = Delete(root.left, value);
+        else if(root.data>value)
+            root.right = Delete(root.right, value);
+        else{
+            if(root.left==null && root.right==null){
+                root=null;
+            }
+            if(root.left==null){
+                BSTNode temp = root;
+                root = root.right;
+                temp=null;
+            }
+            if(root.right==null){
+                BSTNode temp=root;
+                root = root.left;
+                temp=null;
+            }
+            else{
+                BSTNode temp = FindMin(root.right);
+                root.data=temp.data;
+                root.right = Delete(root.right, temp.data);
+            }
+        }
+        return root;
     }
 }
